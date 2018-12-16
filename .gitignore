@@ -1,0 +1,12 @@
+/node_modules
+/dist
+/package-lock.json
+/.idea
+/**/.DS_Store
+/.insta_cookies
+/cordova-social.keystore
+/src/.DS_Store
+/src/modules/.DS_Store
+/npm-debug.log
+/src/modules/.DS_Store
+/public/**/
