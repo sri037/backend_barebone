@@ -45,7 +45,7 @@ docker build
 ##### To Generate Module
 `npm run generator`
 
-`It asks for the module name and generates crud methods with basic model, controller, services, repo.
-   Add generated route in /module/index.ts` 
+`It asks for the module name and generates crud methods with basic model, controller, services, repo.`
+ `Add generated module route in /module/index.ts` 
 
 
