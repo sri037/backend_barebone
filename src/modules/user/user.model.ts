@@ -2,7 +2,8 @@ import { Schema, model, Model, Document } from 'mongoose';
 import * as validator from 'validator';
 import * as crypto from 'crypto';
 
-import {UseRoles} from "./user.type";
+
+import {UserDocument, UseRoles} from "./user.type";
 
 
 export class UserModel extends Schema {
@@ -21,6 +22,7 @@ export class UserModel extends Schema {
         const user: any = super({
             email: {type: String, unique: true, validate: validateEMail, required: true},
             password: { type: String},
+            salt: { type: String },
             verifyUserToken: { type: String },
             token: { type: String },
             roles: { type: UseRoles, default: UseRoles.user },
@@ -34,6 +36,7 @@ export class UserModel extends Schema {
 
         this.pre('save', this.encryptPassword);
         user.method('authenticate', this.authenticate);
+        // user.method('generateJWToken', this.generateJWToken);
         user.method('hashPassword', this.hashPassword);
     }
 
@@ -66,8 +69,7 @@ export class UserModel extends Schema {
 
         return self.password === self.hashPassword(password);
     }
-
 }
 
 let user: UserModel = new UserModel();
-export const USER_MODEL: Model<Document> = model('users', user);
+export const userModel: Model<Document> = model('users', user);

@@ -1,5 +1,6 @@
 import {UserDocument} from "../user.type";
-import {USER_AUTHENTICATION_SERVICE} from "./user.authentication.server.service";
+import {userAuthenticationService} from "./user.authentication.server.service";
+import {Request, Response} from 'express';
 
 export class UserAuthenticationController {
 
@@ -7,9 +8,8 @@ export class UserAuthenticationController {
 
     }
 
-    public signUp(req: any, res: any): void {
+    public signUp(req: Request, res: Response): void {
         let userObject: UserDocument = req.body.data;
-        console.log(userObject);
         if ((!userObject.hasOwnProperty('email')) || userObject.email === '') {
 
             res.status(422).json({
@@ -28,7 +28,7 @@ export class UserAuthenticationController {
 
         } else {
 
-            USER_AUTHENTICATION_SERVICE.signUp(userObject, req, res)
+            userAuthenticationService.signUp(userObject, req, res)
                 .then((data: Object) => {
                     res.status(201).send({data: data});
                 }, (error: Object) => {
@@ -36,7 +36,62 @@ export class UserAuthenticationController {
                 });
         }
     }
+
+    public activateAccount(req: Request, res: Response): void {
+
+        let activateAccountObj = {
+            verificationToken: req.params.token,
+            userId: req.params.userId
+        };
+
+        userAuthenticationService.activateAccount(activateAccountObj)
+            .then((data: Object) => {
+
+                res.status(201).send({data: data});
+
+            }, (error: Object) => {
+                let errorCode: number = error.hasOwnProperty('HTTP_CODE') ? error['HTTP_CODE'] : 422;
+                res.status(errorCode)
+                    .send({ 'error': error });
+            });
+    }
+
+    public signIn(req: Request, res: Response): void {
+        let userObj: any = req.body.data;
+        if (!userObj.hasOwnProperty('email') || userObj['email'] === '') {
+            res.status(422)
+                .json({
+                    error: {
+                        CODE: 'EMAIL_IS_MISSING'
+                    }
+                });
+        } else if (!userObj.hasOwnProperty('password') || userObj['password'] === '') {
+            res.status(422)
+                .json({
+                    error: {
+                        CODE: 'PASSWORD_IS_MISSING'
+                    }
+                });
+        } else {
+            userAuthenticationService.signIn(userObj)
+                .then((data: Object) => {
+                    res.status(200)
+                        .send({
+                            data: data
+                        });
+
+                }, (err: Object) => {
+                    if (err['name'] == 'AuthenticationError') {
+                        res.status(422)
+                            .send({ 'error': err });
+                    } else {
+                        res.status(422)
+                            .send({ 'error': err });
+                    }
+                });
+        }
+    }
 }
 
 
-export const USER_AUTHENTICATION_CONTROLLER: UserAuthenticationController = new UserAuthenticationController();
+export const userAuthenticationController: UserAuthenticationController = new UserAuthenticationController();

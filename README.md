@@ -42,6 +42,10 @@ docker build
 `nodemon dist`
 ##### Above Script, Start node with debug (inspect) and in auto restart server when changes are made in dist folder.
 
- 
+##### To Generate Module
+`npm run generator`
+
+`It asks for the module name and generates crud methods with basic model, controller, services, repo.
+   Add generated route in /module/index.ts` 
 
 

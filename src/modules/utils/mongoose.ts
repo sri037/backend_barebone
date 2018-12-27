@@ -1,4 +1,3 @@
-import { app } from 'express';
 import { connect, connection } from 'mongoose';
 import { ENV } from '../../environments/environment.default';
 

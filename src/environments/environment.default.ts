@@ -8,9 +8,11 @@ export const ENV: EnvironmentInterface = {
     },
     mode: 'development',
     port: 3000,
-    mongodb_host: 'mongodb://localhost/accounts-dev',
-    root_path: path.resolve(__dirname, '../../'),
+    mongodb_host: 'mongodb://localhost/backend-barbecue',
     jwt_secret: 'b@ck€n$',
+    root_path: path.resolve(__dirname, '../../'),
+    destination_path: path.resolve(__dirname, '../../public/uploads'),
+    public_folder_path: path.resolve(__dirname, '../../public'),
     mailer: {
         from: '',
         options: {
@@ -20,7 +22,5 @@ export const ENV: EnvironmentInterface = {
                 pass: ''
             }
         }
-    },
-    destination_path: path.resolve(__dirname, '../../public/uploads'),
-    public_folder_path: path.resolve(__dirname, '../../public')
+    }
 };

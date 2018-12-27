@@ -8,5 +8,5 @@ app.listen(port, (err) => {
         return console.log(err)
     }
 
-    return console.log(`server is listening on ${port} in ${process.env.BUILD_ENV} environment`)
+    return console.log(`server is listening on ${port}`)
 })
