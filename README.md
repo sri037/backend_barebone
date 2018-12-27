@@ -40,7 +40,7 @@ docker build
 ##### Above Script, compiles typescript into javascript and watch any changes (uses local tsconfig.json configuration)
 
 `nodemon dist`
-##### Above Script, Start node with debug (inspect) and in auto restart server when changes are made in dist folder.
+##### Above Script, Start node with debug (inspect) and auto restart server when changes are made in dist folder.
 
 ##### To Generate Module
 `npm run generator`
