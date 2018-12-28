@@ -4,7 +4,6 @@ import { ENV } from "../../../environments/environment.default";
 import {userAuthenticationRepo} from "../../user/authentication/user.authentication.server.repo";
 import {Types} from "mongoose";
 import {UserDocument} from "../../user/user.type";
-import {error} from "util";
 
 export class JwtAuthenticationMiddleware {
 
@@ -26,7 +25,8 @@ export class JwtAuthenticationMiddleware {
 
                     done(false, userObj);
                 })
-                .catch((error) => {
+                .catch((error: any) => {
+                    console.log('error', error);
                     done(true, false);
                 });
         }));

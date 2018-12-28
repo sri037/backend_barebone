@@ -89,4 +89,4 @@ class EmailNotificationProvider {
 	}
 }
 
-export const EMAIL_NOTIFICATION_PROVIDER: EmailNotificationProvider = new EmailNotificationProvider();
+export const emailNotificationProvider: EmailNotificationProvider = new EmailNotificationProvider();

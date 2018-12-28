@@ -1,7 +1,6 @@
 import * as express from 'express'
 import * as hbs from 'express-hbs';
 import * as bodyParser from 'body-parser';
-import * as morgan from 'morgan';
 
 import {api} from './modules/index';
 

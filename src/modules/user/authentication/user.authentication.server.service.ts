@@ -5,7 +5,7 @@ import * as crypto from 'crypto';
 import {Request, Response} from 'express';
 
 import {Types} from "mongoose";
-import {SEND_EMAIL} from "../../utils/send-email";
+import {sendEmail} from "../../utils/send-email";
 
 
 export class UserAuthenticationService {
@@ -34,9 +34,9 @@ export class UserAuthenticationService {
 
             let activationLink = 'http://' + req.headers.host + UserConstant.USER_ACTIVATE_ACCOUNT_LINK + verificationToken + '/userId/' + user._id;
             // Draft email {template path, email template}
-            let draft = await SEND_EMAIL.draftEmail(UserConstant.ACTIVATE_ACCOUNT_TEMPLATE, user.email, activationLink, UserConstant.ACTIVATE_ACCOUNT_SUBJECT)
+            let draft = await sendEmail.draftEmail(UserConstant.ACTIVATE_ACCOUNT_TEMPLATE, user.email, activationLink, UserConstant.ACTIVATE_ACCOUNT_SUBJECT)
             // Send email
-            await SEND_EMAIL.sendEmail(res, draft.templatePath, draft.templateObject, user.email, draft.emailSubject);
+            await sendEmail.sendEmail(res, draft.templatePath, draft.templateObject, user.email, draft.emailSubject);
 
             return {
                 user: user,

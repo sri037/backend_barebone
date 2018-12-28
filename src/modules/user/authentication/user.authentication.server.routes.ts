@@ -2,14 +2,14 @@ import {Router} from 'express';
 import {userAuthenticationController} from './user.authentication.server.controller';
 import {jwtAuthenticationMiddleware} from '../../utils/middleware/jwt-authentication'
 
-export const USER_ROUTE: Router = Router();
+export const userRoute: Router = Router();
 
-USER_ROUTE.post('/auth/signUp', userAuthenticationController.signUp);
-USER_ROUTE.get('/auth/activateAccount/:token/userId/:userId', userAuthenticationController.activateAccount);
+userRoute.post('/auth/signUp', userAuthenticationController.signUp);
+userRoute.get('/auth/activateAccount/:token/userId/:userId', userAuthenticationController.activateAccount);
 
-USER_ROUTE.post('/auth/signIn', userAuthenticationController.signIn);
+userRoute.post('/auth/signIn', userAuthenticationController.signIn);
 
-USER_ROUTE.get('/auth/testJWT', jwtAuthenticationMiddleware.authenticateUser(),
+userRoute.get('/auth/testJWT', jwtAuthenticationMiddleware.authenticateUser(),
     (req: any, res: any): any => {
         let userObj = req.user;
         res.json({data: {user: userObj}});
