@@ -34,6 +34,7 @@ export class JwtAuthenticationMiddleware {
 
     public authenticateUser(): any {
         return (req: any, res: any, next: any): void => {
+            console.log(JSON.stringify(req.header('authorization')));
             passport.authenticate('jwt', (err: any, user: any, info: any) => {
                 if (err || info instanceof Error) {
                     res.status(403)
