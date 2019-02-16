@@ -16,7 +16,7 @@ export class UserAuthenticationService {
 
     public async signUp(userObject: UserDocument, req: Request, res: Response): Promise<any> {
         try {
-            let userExists = await userAuthenticationRepo.findUser({'email': userObject.email});
+            let userExists = await userAuthenticationRepo.findUser({'email': userObject.email.toLowerCase().trim()});
             if (userExists) {
                 throw {CODE: 'EMAIL_ALREADY_EXISTS'};
             }
@@ -25,16 +25,20 @@ export class UserAuthenticationService {
 
             // Construct user object
             let userDocument: UserDocument = {
-                email: userObject.email.toLowerCase(),
-                password: userObject.password,
+                email: userObject.email.toLowerCase().trim(),
+                password: userObject.password.trim(),
                 verifyUserToken: verificationToken as string
             };
 
             let user = await userAuthenticationRepo.signUp(userDocument);
 
-            let activationLink = 'http://' + req.headers.host + UserConstant.USER_ACTIVATE_ACCOUNT_LINK + verificationToken + '/userId/' + user._id;
+            console.log(req.protocol)
+
+            let activationLink = req.protocol + '://' + req.headers.host + UserConstant.USER_ACTIVATE_ACCOUNT_LINK + verificationToken + '/userId/' + user._id;
+
             // Draft email {template path, email template}
             let draft = await sendEmail.draftEmail(UserConstant.ACTIVATE_ACCOUNT_TEMPLATE, user.email, activationLink, UserConstant.ACTIVATE_ACCOUNT_SUBJECT)
+
             // Send email
             await sendEmail.sendEmail(res, draft.templatePath, draft.templateObject, user.email, draft.emailSubject);
 
@@ -98,7 +102,7 @@ export class UserAuthenticationService {
     public signIn(userObj: any): any {
         return new Promise<any>(async (resolve: any, reject: any): Promise<any> => {
             try {
-                let userObject: UserDocument = await userAuthenticationRepo.findUser({'email': userObj.email});
+                let userObject: UserDocument = await userAuthenticationRepo.findUser({'email': userObj.email.toLowerCase().trim()});
 
                 if (!userObject) throw {
                     CODE: 'INVALID_USERNAME_OR_PASSWORD',

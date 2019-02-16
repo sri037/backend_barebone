@@ -5,6 +5,10 @@ import * as crypto from 'crypto';
 
 import {UserDocument, UseRoles} from "./user.type";
 
+export class ProfileImageType {
+    url: string;
+    mime: string;
+};
 
 export class UserModel extends Schema {
 
@@ -22,6 +26,10 @@ export class UserModel extends Schema {
         const user: any = super({
             email: {type: String, unique: true, validate: validateEMail, required: true},
             password: { type: String},
+            firstName: {type: String},
+            lastName: {type: String},
+            displayName: {type: String},
+            profileImage: {type: Array<ProfileImageType>()},
             salt: { type: String },
             verifyUserToken: { type: String },
             token: { type: String },
@@ -44,9 +52,9 @@ export class UserModel extends Schema {
     encryptPassword(next: any): void {
         let me: any = this;
         if (me.password && me.isModified('password')) {
-            me.salt = crypto.randomBytes(16)
+            me.salt = crypto.randomBytes(32)
                 .toString('base64');
-            me.password = crypto.pbkdf2Sync(me.password, new Buffer(me.salt, 'base64'), 10000, 64, 'SHA1')
+            me.password = crypto.pbkdf2Sync(me.password, new Buffer(me.salt, 'base64'), 10000, 256, 'SHA256')
                 .toString('base64');
         }
         next();
@@ -56,7 +64,7 @@ export class UserModel extends Schema {
     public hashPassword(password: any): any {
         let self: any = this;
         if (self.salt && password) {
-            return crypto.pbkdf2Sync(password, new Buffer(self.salt, 'base64'), 10000, 64, 'SHA1')
+            return crypto.pbkdf2Sync(password, new Buffer(self.salt, 'base64'), 10000, 256, 'SHA256')
                 .toString('base64');
         } else {
             return password;
