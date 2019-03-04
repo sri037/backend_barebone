@@ -53,4 +53,6 @@ It asks for the module name and generates crud methods with basic model, control
 Add generated module route in /module/index.ts
 ```
 
+To Render Angular Project, copy dist folder from angular project to /public/www/ folder.
+
 
