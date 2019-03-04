@@ -5,12 +5,21 @@ import * as bodyParser from 'body-parser';
 import {api} from './modules/index';
 
 import {connectToDb} from './modules/utils/mongoose';
+import { EnvironmentInterface } from './environments/environment.interface';
+import * as path from "path";
 
 
 class Application {
     public express;
+    public env = './environments/environment';
+    public envObject: EnvironmentInterface;
 
     constructor() {
+        let buildEnv = process.env.BUILD_ENV !== undefined ? '.' + process.env.BUILD_ENV  : '';
+        this.env = this.env + buildEnv;
+        this.envObject = require(this.env)
+        console.log(this.envObject);
+
         this.express = express();
         this._loadConfig();
         this._mountRoutes();
@@ -37,6 +46,10 @@ class Application {
     private _loadConfig() {
         let app = this.express;
 
+        // Load Angular project
+        app.use(express.static('public/www'));
+
+        app.use('/public', express.static(path.resolve(__dirname, '../public')));
         /*
         * Adding a view engine.
         */
